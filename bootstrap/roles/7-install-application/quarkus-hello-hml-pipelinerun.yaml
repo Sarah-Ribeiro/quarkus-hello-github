@@ -1,0 +1,65 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pipeline-qh-
+  namespace: quarkus-hello-hml
+  labels:
+    tekton.dev/pipeline: generic-pipeline-deploy
+spec:
+  pipelineRef:
+    resolver: cluster
+    params:
+      - name: name
+        value: generic-pipeline-jdk21-quarkus
+      - name: namespace
+        value: smanager-pipeline
+      - name: kind
+        value: pipeline
+  params:
+    - name: APP_NAME
+      value: quarkus-hello
+    - name: GIT_REPO
+      value: >-
+        http://gogs-gogs.apps.cluster-7cjss.sandbox2040.opentlc.com/gogs/quarkus-hello.git
+    - name: GIT_BRANCH
+      value: master
+    - name: PATH_CONTEXT
+      value: .
+    - name: QUAY_REPO_APP
+      value: quarkus-hello
+    - name: QUAY_ORGANIZATION
+      value: smanager
+    - name: QUAY_REGISTRY
+      value: smanager-registry-quay-quay.apps.cluster-7cjss.sandbox2040.opentlc.com
+    - name: APP_NAMESPACE
+      value: quarkus-hello-hml
+    - name: APP_MANIFESTS_GIT
+      value: >-
+        http://gogs-gogs.apps.cluster-7cjss.sandbox2040.opentlc.com/gogs/quarkus-hello-config.git
+    - name: KUSTOMIZATION_PATH
+      value: overlay/hml
+    - name: ARGO_CD_APPLICATION_NAME
+      value: quarkus-hello-hml
+    - name: ARTIFACT_NAME
+      value: quarkus-hello.war
+    - name: GIT_USER
+      value: gogs
+    - name: GIT_PASS
+      value: gogs
+    - name: JAVA_IMAGE
+      value: 'registry.access.redhat.com/ubi9/openjdk-21:1.21-3.1739376165'
+    - name: URL_APP
+      value: 'http://rt-quarkus-hello-quarkus-hello-hml.apps.cluster-7cjss.sandbox2040.opentlc.com/hello'
+    - name: DEPLOYMENT_FILE_PATH
+      value: base
+
+  serviceAccountName: pipeline
+  timeouts:
+    pipeline: 1h0m0s
+  workspaces:
+    - configMap:
+        name: cm-maven-settings
+      name: maven-settings
+    - name: workspace
+      persistentVolumeClaim:
+        claimName: pvc-workspace

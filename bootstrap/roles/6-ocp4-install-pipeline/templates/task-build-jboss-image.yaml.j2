@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-jboss-image
+  namespace: "{{ pipeline_namespace }}"
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/tags: deploy
+    tekton.dev/displayName: "Build JBoss EAP 7.4"
+spec:
+  description: This task build a JBoss EAP 7.4 application
+  params:
+    - name: IMAGE
+      type: string
+      description: The application image stream
+
+    - name: JBOSS_IMAGE
+      type: string
+      description: The java imagestream
+      default: 'image-registry.openshift-image-registry.svc:5000/openshift/eap74-openjdk11-runtime-openshift-rhel8:7.4.20-7'
+
+    - name: BUILDER_IMAGE
+      type: string
+      description: The location of the buildah builder image.
+      default: 'registry.redhat.io/rhel8/buildah@sha256:5c7cd7c9a3d49e8905fc98693f6da605aeafae36bde5622dc78e12f31db3cd59'
+
+    - name: TLSVERIFY
+      type: string
+      description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+      default: 'false'
+
+    - name: SKIP_PUSH
+      type: string
+      description: Skip pushing the built image
+      default: 'false'
+
+    - name: ARTIFACT_NAME
+      type: string
+      description: Artifact name to deploy
+      default: soews
+  results:
+    - description: Digest of the image just built.
+      name: IMAGE_DIGEST
+      type: string
+  steps:
+    - name: build-and-push
+      image: $(params.BUILDER_IMAGE)
+      script: |
+        #!/bin/sh
+        set -e
+
+        buildah --storage-driver=vfs from --name custom-name $(params.JBOSS_IMAGE)
+        container=$(buildah --storage-driver=vfs containers --quiet --filter name=custom-name)
+        echo "containerID = $container"
+               
+        #ls -la $(workspaces.source.path)
+        #ls -la $(workspaces.source.path)/source/
+        #ls -la $(workspaces.source.path)/source/target/
+        #ls -la $(workspaces.source.path)/source/modules
+        #ls -la $(workspaces.source.path)/source/configuration
+
+
+        buildah copy  --storage-driver=vfs $container $(workspaces.source.path)/source/target/$(params.ARTIFACT_NAME) /opt/eap/standalone/deployments/$(params.ARTIFACT_NAME)
+
+        buildah copy --storage-driver=vfs $container $(workspaces.source.path)/source/configuration/standalone-openshift.xml /opt/eap/standalone/configuration/standalone-openshift.xml
+
+        buildah copy --storage-driver=vfs $container $(workspaces.source.path)/source/modules/ /opt/eap/modules 
+
+        buildah config --storage-driver=vfs --cmd "/opt/eap/bin/openshift-launch.sh" $container
+        
+        buildah commit --storage-driver=vfs $container $(params.IMAGE)
+        buildah images --storage-driver=vfs
+        [[ "$(params.SKIP_PUSH)" == "true" ]] && echo "Push skipped" && exit 0
+        buildah push --storage-driver=vfs --tls-verify=$(params.TLSVERIFY) \
+          --digestfile $(workspaces.source.path)/image-digest $(params.IMAGE) \
+          docker://$(params.IMAGE)
+
+        cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
+      securityContext:
+        capabilities:
+          add:
+            - SETFCAP
+  workspaces:
+    - mountPath: /workspace/source
+      name: source

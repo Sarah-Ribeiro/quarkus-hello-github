@@ -1,0 +1,15 @@
+# hml ou prd
+app_environment: 'hml'
+app_name: 'quarkus-hello'
+app_namespace: '{{ app_name }}-{{ app_environment }}'
+
+quay_repository: '{{ app_name }}'
+quay_secret_name: 'sct-quay-robot'
+quay_route: 'smanager-registry-quay-quay.apps.cluster-7cjss.sandbox2040.opentlc.com'
+quay_org_name: "{{ company_name }}"
+quay_robot_token: 'EN0YN9T11C3L6E730PFZA4PEP3ENCKLK7RDK1XW43LVC6TQJAWCTX34S194T6YPM'
+quay_application_access_token: 'SHujenc1TLGA45Jx6e2usDVl6l6uHDNxKToFSSsT'
+
+webhook_secret_token: 'defina-seu-token-aqui-para-webhook'
+
+repo_url: 'http://gogs-gogs.apps.cluster-7cjss.sandbox2040.opentlc.com'
