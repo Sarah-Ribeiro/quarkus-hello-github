@@ -44,7 +44,7 @@ Ajustes básicos
     - cluster_url **aproveite para fazer um replace em todos os arquivos do projeto**
     - No bastion autenticar no Openshift de des/hml
       ```
-      oc login -u <user> -p <pass> --server=https://apps.cluster-7cjss.sandbox2040.opentlc.com:6443
+      oc login -u <user> -p <pass> --server=https://apps.cluster-nzfvj.dynamic.redhatworkshops.io:6443
       ```
     - Criar um ServiceAccount e armazernar seu token em sa_cluster_admin_token
        ```
@@ -240,7 +240,7 @@ Executar
     
       Criar os repositorios e subir codigo fonte 
       quarkus-hello
-          git clone http://gogs-gogs.apps.cluster-7cjss.sandbox2040.opentlc.com/gogs/quarkus-hello.git
+          git clone http://gogs-gogs.apps.cluster-nzfvj.dynamic.redhatworkshops.io/gogs/quarkus-hello.git
           cp -r quarkus-hello-orig/* quarkus-hello
           cd quarkus-hello
           git add .
@@ -248,7 +248,7 @@ Executar
           git push -u origin master
           cd ..
       quarkus-hello-config
-          git clone http://gogs-gogs.apps.cluster-7cjss.sandbox2040.opentlc.com/gogs/quarkus-hello-config.git
+          git clone http://gogs-gogs.apps.cluster-nzfvj.dynamic.redhatworkshops.io/gogs/quarkus-hello-config.git
           cp -r quarkus-hello-config-orig/* quarkus-hello-config
           cd quarkus-hello-config
           git add .
@@ -348,7 +348,7 @@ Executar
           spec:
             registrySources:
               insecureRegistries:
-              - smanager-registry-quay-quay.apps.cluster-7cjss.sandbox2040.opentlc.com
+              - smanager-registry-quay-quay.apps.cluster-nzfvj.dynamic.redhatworkshops.io
           ```
           [Allowing Insecure Registry](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/images/image-configuration#images-configuration-insecure_image-configuration)
 
