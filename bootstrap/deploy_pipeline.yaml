@@ -15,10 +15,10 @@
       when: "'acs' in install"
 
 # Instalar o Noobaa somente em ambientes sem ODF
-    - name: 'Install and configure Noobaa Object Storage'
-      include_role:
-        name: "3-opc4-install-noobaa"
-      when: "'nooba' in install"
+    # - name: 'Install and configure Noobaa Object Storage'
+    #   include_role:
+    #     name: "3-opc4-install-noobaa"
+    #   when: "'nooba' in install"
 
     - name: 'Install and configure Quay'
       include_role:

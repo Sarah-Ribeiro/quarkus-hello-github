@@ -3,18 +3,18 @@
     state: present
     definition: "{{ lookup('template', item ) | from_yaml }}"
   loop:
-  - task-build-quarkus-image.yaml.j2
-  - task-build-jboss-image.yaml.j2
-  - task-argo-sync-and-wait.yaml.j2
-  - task-git-update-deployment.yaml.j2
-  - task-git-clone.yaml.j2
-  - task-maven.yaml.j2
-  - task-s2i-java.yaml.j2
-  - task-dependency-report.yaml.j2
-  - task-update-release.yaml.j2
-  - task-rox-image-check.yaml.j2
-  - task-rox-deployment-check.yaml.j2
-  - task-rox-image-scan.yaml.j2
+  - task-build-quarkus-image.yaml.j2 # Build da imagem do quarkus
+  - task-build-jboss-image.yaml.j2 # build da imagem do JBoss
+  - task-argo-sync-and-wait.yaml.j2 # Espera o argocd sincronizar e espera
+  - task-git-update-deployment.yaml.j2 # Atualiza o deployment
+  - task-git-clone.yaml.j2 # Clona o repositorio
+  - task-maven.yaml.j2 # Build da imagem do maven
+  - task-s2i-java.yaml.j2 # Build da imagem do s2i java
+  - task-dependency-report.yaml.j2 # Report de dependencias
+  - task-update-release.yaml.j2 # Incrementa o release
+  - task-rox-image-check.yaml.j2 # Verifica a imagem
+  - task-rox-deployment-check.yaml.j2 # Verifica o deployment
+  - task-rox-image-scan.yaml.j2 # Scan da imagem
 
 - name: Create OpenShift Objects for Openshift Pipelines Templates
   k8s:
