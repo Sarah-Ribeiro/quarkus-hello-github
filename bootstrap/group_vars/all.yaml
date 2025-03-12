@@ -37,7 +37,7 @@ gogs_password: 'gogs'
 
 nexus_namespace: 'nexus'
 nexus_user: 'admin'
-nexus_password: 'admin1234'
+nexus_password: 'admin'
 nexus_url: "{{ nexus_namespace }}.{{ cluster_url }}"
   
 #  ansible-vault encrypt all.yaml
