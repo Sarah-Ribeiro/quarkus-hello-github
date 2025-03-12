@@ -7,8 +7,8 @@ quay_repository: '{{ app_name }}'
 quay_secret_name: 'sct-quay-robot'
 quay_route: 'smanager-registry-quay-quay.apps.cluster-cnmxf.dynamic.redhatworkshops.io'
 quay_org_name: "{{ company_name }}"
-quay_robot_token: 'URK0OMR83HG522QE5B1364QGR6Y352I34RK7BOQ7NXJTSOK40N38T9PKGIT1PFVJ'
-quay_application_access_token: 'FReT08GKvKazzZ11AMyyKRrD9Ik9Jb6msBQnIDmp'
+quay_robot_token: 'MKTEV83T0QD3D5VNZAUYTMOJZ1VCO5LL69TY2LM4GAVNCN9UPJ4VU6E0IUNSB1YM'
+quay_application_access_token: 'Sndm41DW9DH2ESLTu74PjDQpmqe3Wk0Vu3O7vAsg'
 
 webhook_secret_token: 'defina-seu-token-aqui-para-webhook'
 
